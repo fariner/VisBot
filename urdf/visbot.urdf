@@ -1,0 +1,732 @@
+<?xml version="1.0"?>
+<robot name="visbot">
+  <link name="base_link"> <!--sistema de referencia a nivel de suelo; 0.015 desde centro eje motor hasta parte inferior barras de la base;desde parte inferiro barras hasta centro barras 0.015; de suelo a centro eje rueda 0.0625-->
+  </link>
+
+  <joint name="base_platformTObase_link" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_platform"/>
+    <origin xyz="0 0 0.099" /><!--visbot original <origin xyz="0 0 0.0925" />-->
+    <!--visbot original 2 ruedas <origin xyz="-0.14 0 0.0925" />-->
+  <!--se ajusta la X para dejar base_link en el centro de giro del robot -0.14 es para el robot con ruedines -->
+  </joint>
+
+  <link name="base_platform">
+    <visual name="side1">
+      <geometry>
+        <box size="0.25 0.03 0.03"/>
+      </geometry>
+      <origin xyz="0 -0.11 0"/><!--desde el centro hasta el centro de la barra-->
+      <material name="grey"><!--los parametros de color no tienen efecto cuando se pone una textura-->
+        <texture filename="package://visbot/urdf/texture/alum.jpg"/>
+      </material>
+    </visual>
+    <visual name="side2">
+      <geometry>
+        <box size="0.25 0.03 0.03"/>
+      </geometry>
+      <origin xyz="0 0.11 0"/>
+      <material name="grey">
+        
+      </material>
+    </visual>
+    <visual name="back">
+      <geometry>
+        <box size="0.25 0.03 0.03"/>
+      </geometry>
+      <origin rpy="0 0 1.570796327" xyz="-0.14 0 0"/>
+      <material name="grey">
+        
+      </material>
+    </visual>
+    <visual name="front">
+      <geometry>
+        <box size="0.25 0.03 0.03"/>
+      </geometry>
+      <origin rpy="0 0 1.570796327" xyz="0.14 0 0"/>
+      <material name="grey">
+       
+      </material>
+    </visual>
+  </link>
+<!--definicion de motores -->
+  <joint name="Mfront1TObase_platform" type="fixed">
+    <parent link="base_platform"/>
+    <child link="Mfront1"/>
+    <origin xyz="0.14 0.0875 -0.03" />
+  </joint>
+
+  <link name="Mfront1">
+    <visual name="M">
+      <geometry>
+        <box size="0.075 0.03 0.03"/>
+      </geometry>
+      <origin rpy="1.570796327 0 1.570796327"/>
+		<!--giro sobre eje x del eje de coordenadas visual para mostrar el lado adecuado de la textura -->
+      <material name="Malum">
+        <texture filename="package://visbot/urdf/texture/brushed-metal-texture.jpg"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="Mfront2TObase_platform" type="fixed">
+    <parent link="base_platform"/>
+    <child link="Mfront2"/>
+    <origin xyz="0.14 -0.0875 -0.03" />
+  </joint>
+
+  <link name="Mfront2">
+    <visual name="M">
+      <geometry>
+        <box size="0.075 0.03 0.03"/>
+      </geometry>
+      <origin rpy="1.570796327 0 1.570796327"/>
+      <material name="Malum"/>
+    </visual>
+  </link>
+
+  <joint name="Mback1TObase_platform" type="fixed">
+    <parent link="base_platform"/>
+    <child link="Mback1"/>
+    <origin xyz="-0.14 0.0875 -0.03" />
+  </joint>
+
+  <link name="Mback1">
+    <visual name="M">
+      <geometry>
+        <box size="0.075 0.03 0.03"/>
+      </geometry>
+      <origin rpy="1.570796327 0 1.570796327"/>
+      <material name="Malum"/>
+    </visual>
+  </link>
+
+  <joint name="Mback2TObase_platform" type="fixed">
+    <parent link="base_platform"/>
+    <child link="Mback2"/>
+    <origin xyz="-0.14 -0.0875 -0.03" />
+  </joint>
+
+  <link name="Mback2">
+    <visual name="M">
+      <geometry>
+        <box size="0.075 0.03 0.03"/>
+      </geometry>
+      <origin rpy="1.570796327 0 1.570796327"/>
+      <material name="Malum"/>
+    </visual>
+  </link>
+<!--Fin definicion de motores -->
+<!--definicion de ejes de motores -->
+  <joint name="EjeFront1TOMfront1" type="continuous"><!--EjeFront1TOMfront1-->
+    <axis xyz="0 1 0"/><!--para que cuando se den angulos positivos de rueda la rueda vaya hacia adelante-->
+    <parent link="Mfront1"/>
+    <child link="EjeFront1"/>
+    <origin xyz="0 0.0225 -0.0065" /><!--original visbot <origin xyz="0 0.0375 0" />-->
+  </joint>
+
+  <link name="EjeFront1">
+    <visual name="E">
+      <geometry>
+        <cylinder radius="0.003" length="0.05"/>
+      </geometry>
+      <origin rpy="1.570796327 0 0" xyz="0 0.025 0"/>
+      <material name="grey"/>
+    </visual>
+  </link>
+
+  <joint name="EjeFront2TOMfront2" type="continuous"><!--EjeFront2TOMfront2-->
+    <axis xyz="0 1 0"/>
+    <parent link="Mfront2"/>
+    <child link="EjeFront2"/>
+    <origin xyz="0 -0.0225 -0.0065" /><!--original visbot <origin xyz="0 -0.0375 0" />-->
+  </joint>
+
+  <link name="EjeFront2">
+    <visual name="E">
+      <geometry>
+        <cylinder radius="0.003" length="0.05"/>
+      </geometry>
+      <origin rpy="1.570796327 0 0" xyz="0 -0.025 0"/>
+      <material name="grey"/>
+    </visual>
+  </link>
+
+  <joint name="EjeBack1TOMback1" type="continuous"><!--EjeBack1TOMback1-->
+    <axis xyz="0 1 0"/>
+    <parent link="Mback1"/>
+    <child link="EjeBack1"/>
+    <origin xyz="0 0.0225 -0.0065" /><!--original visbot <origin xyz="0 0.0375 0" />-->
+  </joint>
+
+  <link name="EjeBack1">
+    <visual name="E">
+      <geometry>
+        <cylinder radius="0.003" length="0.05"/>
+      </geometry>
+      <origin rpy="1.570796327 0 0" xyz="0 0.025 0"/>
+      <material name="grey"/>
+    </visual>
+  </link>
+
+  <joint name="EjeBack2TOMback2" type="continuous"><!--EjeBack2TOMback2-->
+    <axis xyz="0 1 0"/>
+    <parent link="Mback2"/>
+    <child link="EjeBack2"/>
+    <origin xyz="0 -0.0225 -0.0065" /><!--original visbot <origin xyz="0 -0.0375 0" />-->
+  </joint>
+
+  <link name="EjeBack2">
+    <visual name="E">
+      <geometry>
+        <cylinder radius="0.003" length="0.05"/>
+      </geometry>
+      <origin rpy="1.570796327 0 0" xyz="0 -0.025 0"/>
+      <material name="grey"/>
+    </visual>
+  </link>
+<!--FIN definicion de ejes de motores -->
+<!--definicion de piezas de motores -->
+  <joint name="PFront1TOMfront1" type="fixed">
+    <parent link="Mfront1"/>
+    <child link="PFront1"/>
+    <origin xyz="0 0.0375 0" />
+  </joint>
+
+  <link name="PFront1">
+    <visual name="E">
+      <geometry>
+        <box size="0.03 0.06 0.006"/>
+      </geometry>
+      <origin rpy="1.570796327 0 0" xyz="0 0.003 0.015"/>
+      <material name="P">
+        <color rgba="0 0.4 0.3 0.5"/>
+        
+      </material>
+    </visual>
+  </link>
+
+  <joint name="PFront2TOMfront2" type="fixed">
+    <parent link="Mfront2"/>
+    <child link="PFront2"/>
+    <origin xyz="0 -0.0375 0" />
+  </joint>
+
+  <link name="PFront2">
+    <visual name="E">
+      <geometry>
+        <box size="0.03 0.06 0.006"/>
+      </geometry>
+      <origin rpy="1.570796327 0 0" xyz="0 -0.003 0.015"/>
+      <material name="P">
+        <color rgba="0 0.4 0.3 0.5"/>
+        
+      </material>
+    </visual>
+  </link>
+
+  <joint name="PBack1TOMback1" type="fixed">
+    <parent link="Mback1"/>
+    <child link="PBack1"/>
+    <origin xyz="0 0.0375 0" />
+  </joint>
+
+  <link name="PBack1">
+    <visual name="E">
+      <geometry>
+        <box size="0.03 0.06 0.006"/>
+      </geometry>
+      <origin rpy="1.570796327 0 0" xyz="0 0.003 0.015"/>
+      <material name="P">
+        <color rgba="0 0.4 0.3 0.5"/>
+        
+      </material>
+    </visual>
+  </link>
+
+  <joint name="PBack2TOMback2" type="fixed">
+    <parent link="Mback2"/>
+    <child link="PBack2"/>
+    <origin xyz="0 -0.0375 0" />
+  </joint>
+
+  <link name="PBack2">
+    <visual name="E">
+      <geometry>
+        <box size="0.03 0.06 0.006"/>
+      </geometry>
+      <origin rpy="1.570796327 0 0" xyz="0 -0.003 0.015"/>
+      <material name="P">
+        <color rgba="0 0.4 0.3 0.5"/>
+        
+      </material>
+    </visual>
+  </link>
+<!--FIN definicion de piezas de motores -->
+<!--Definicion de ruedas-->
+  <joint name="WheelFront1TOEjeFront1" type="fixed">
+    <parent link="EjeFront1"/>
+    <child link="WheelFront1"/>
+    <origin xyz="0 0.05 0" />
+  </joint>
+
+  <link name="WheelFront1">
+    <visual name="E">
+      <geometry>
+        <mesh scale ="0.03673 0.04988 0.03673" filename="package://visbot/urdf/Wheel4.DAE"/>
+	<!--escala calculada a partir de la dimensiones reales del mesh(todo en metros): dimensionObjetivoX/dimensionMeshX-->
+      </geometry>
+      <origin rpy="0 0 3.141592654" xyz="-0.035 0.05 0"/>
+      <material name="Ej">
+        <color rgba="1 1 1 1"/>
+        
+      </material>
+    </visual>
+  </link>
+
+  <joint name="WheelFront2TOEjeFront2" type="fixed">
+    <parent link="EjeFront2"/>
+    <child link="WheelFront2"/>
+    <origin xyz="0 -0.05 0" />
+  </joint>
+
+  <link name="WheelFront2">
+    <visual name="E">
+      <geometry>
+        <mesh scale ="0.03673 0.04988 0.03673" filename="package://visbot/urdf/Wheel4.DAE"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.035 -0.05 0"/>
+      <material name="Ej">
+        <color rgba="1 1 1 1"/>
+        
+      </material>
+    </visual>
+  </link>
+
+  <joint name="WheelBack1TOEjeBack1" type="fixed">
+    <parent link="EjeBack1"/>
+    <child link="WheelBack1"/>
+    <origin xyz="0 0.05 0" />
+  </joint>
+
+  <link name="WheelBack1">
+    <visual name="E">
+      <geometry>
+        <mesh scale ="0.03673 0.04988 0.03673" filename="package://visbot/urdf/Wheel4.DAE"/>
+      </geometry>
+      <origin rpy="0 0 3.141592654" xyz="-0.035 0.05 0"/>
+      <material name="Ej">
+        <color rgba="1 1 1 1"/>
+        
+      </material>
+    </visual>
+  </link>
+
+  <joint name="WheelBack2TOEjeBack2" type="fixed">
+    <parent link="EjeBack2"/>
+    <child link="WheelBack2"/>
+    <origin xyz="0 -0.05 0" />
+  </joint>
+
+  <link name="WheelBack2">
+    <visual name="E">
+      <geometry>
+        <mesh scale ="0.03673 0.04988 0.03673" filename="package://visbot/urdf/Wheel4.DAE"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.035 -0.05 0"/>
+      <material name="Ej">
+        <color rgba="1 1 1 1"/>
+        
+      </material>
+    </visual>
+  </link>
+
+<!--Fin Definicion de ruedas-->
+<!--Definicion chasis superior-->
+  <joint name="CHSupTObase_platform" type="fixed">
+    <parent link="base_platform"/>
+    <child link="CHSup"/>
+    <origin xyz="0.11 0 0.015" />
+  </joint>
+
+  <link name="CHSup">
+    <visual name="b1">
+      <geometry>
+        <box size="1 0.03 0.03"/>
+      </geometry>
+      <origin rpy="0 1.570796327 0 " xyz="0 -0.11 0.5"/>
+      <material name="grey"/>
+    </visual>
+    <visual name="b2">
+      <geometry>
+        <box size="1 0.03 0.03"/>
+      </geometry>
+      <origin rpy="0 1.570796327 0 " xyz="0 0.11 0.5"/>
+      <material name="grey"/>
+    </visual>
+    <visual name="bs">
+      <geometry>
+        <box size="0.25 0.03 0.03"/>
+      </geometry>
+      <origin rpy="1.570796327 0 1.570796327" xyz="0 0 1.015"/> <!--giro sobre x para mostrar el lado correcto de la textura-->
+      <material name="grey"/>
+    </visual>
+    <visual name="s1">
+      <geometry>
+        <box size="0.25 0.03 0.03"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="-0.14 -0.11 0.745"/> 
+      <material name="grey"/>
+    </visual>
+    <visual name="s2">
+      <geometry>
+        <box size="0.25 0.03 0.03"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="-0.14 0.11 0.745"/> 
+      <material name="grey"/>
+    </visual>
+  </link>
+<!--FIN Definicion chasis superior-->
+<!--Definicion cristal inferior-->
+  <joint name="CRInfTObase_platform" type="fixed">
+    <parent link="base_platform"/>
+    <child link="CRInf"/>
+    <origin xyz="0.11 0 0.015" />
+  </joint>
+
+  <link name="CRInf">
+    <visual name="cr">
+      <geometry>
+        <box size="0.006 0.20 0.30"/>
+      </geometry>
+      <origin rpy="0 0 0 " xyz="0 0 0.15"/>
+      <material name="P"/>
+    </visual>
+  </link>
+<!--FIN Definicion cristal inferior-->
+<!--Definicion cuello-->
+  <joint name="NSopTOCHSup" type="fixed">
+    <parent link="CHSup"/>
+    <child link="NSop"/>
+    <origin xyz="0 0 1.03" />
+  </joint>
+
+  <link name="NSop">
+    <visual name="c1">
+      <geometry>
+        <cylinder radius="0.005" length="0.048"/>
+      </geometry>
+      <origin rpy="0 0 0 " xyz="0 -0.02 0.024"/>
+      <material name="brush">
+        <texture filename="package://visbot/urdf/texture/brushed-metal-texture.jpg"/>
+      </material>
+    </visual>
+    <visual name="c2">
+      <geometry>
+        <cylinder radius="0.005" length="0.048"/>
+      </geometry>
+      <origin rpy="0 0 0 " xyz="0 0.02 0.024"/>
+      <material name="brush"/>
+    </visual>
+  </link>
+
+  <joint name="CRSopTONSop" type="fixed">
+    <parent link="NSop"/>
+    <child link="CRSop"/>
+    <origin xyz="0 0 0.04" />
+  </joint>
+
+  <link name="CRSop">
+    <visual name="crr">
+      <geometry>
+        <box size="0.06 0.06 0.006"/>
+      </geometry>
+      <origin rpy="0 0 0 " xyz="0 0 0"/>
+      <material name="P"/>
+    </visual>
+  </link>
+
+  <joint name="SInfTONSop" type="fixed">
+    <parent link="NSop"/>
+    <child link="SInf"/>
+    <origin xyz="0 0 0.04" /><!--Desde sistema de referencia NSop 0.04 m mas arriba se encuentra el centro del soporte de cristal-->
+  </joint>
+
+  <link name="SInf">
+    <visual name="sinf">
+      <geometry>
+        <box size="0.04 0.02 0.04"/>
+      </geometry>
+      <origin rpy="0 0 0 " xyz="0 0 -0.013"/> 
+      <!-- por encima del cristal el servo sobresale 0.004m por lo tanto 0.004+0.003 hasta centro de cirstal... 0.02-0.007=0.013-->
+      <material name="Mblack">
+        <texture filename="package://visbot/urdf/texture/metalblack.jpg"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="YAW" type="revolute"><!--RevInfTOSInf-->
+    <axis xyz="0 0 -1"/>
+    <limit effort="1000.0" lower="0.0" upper="3.141592654" velocity="0.001"/>
+    <parent link="SInf"/>
+    <child link="RevInf"/>
+    <origin xyz="0.01 0  0.007" rpy="0 0 1.570796327"/><!--0.004+0.003  en la superficie del servo-->
+  </joint>
+
+  <link name="RevInf">
+    <visual name="EjeSInf">
+      <geometry>
+        <cylinder radius="0.01" length="0.006"/>
+        <!--0.01 de superfice de cristal al inicio de chasis rotor inferios - 0.004 que sobrasale el servo =0.006 -->
+      </geometry>
+      <origin rpy="0 0 0 " xyz="0 0 0.003"/>
+      <material name="blue">
+        <texture filename="package://visbot/urdf/texture/metalblue.jpg"/>
+      </material>
+    </visual>
+    <visual name="BInfSInf">
+      <geometry>
+        <box size="0.02 0.055 0.002"/>
+      </geometry>
+      <origin rpy="0 0 0 " xyz="0 0 0.007"/>
+      <!--0.006 para poner eje visual en la superficie del eje +0.001 para sacar la parte de la barra incustada en el eje-->
+      <material name="blue"/>
+    </visual>
+    <visual name="B1SInf">
+      <geometry>
+        <box size="0.02 0.002 0.035"/>
+      </geometry>
+      <origin rpy="0 0 0 " xyz="0 -0.0265 0.0255"/>
+      <!--0.008 para poner eje visual en la superficie de la barra inferior + 0.0175 ques la mitad la la barra = 0.0255-->
+      <!--0.0275 es la mitad de la barra inferior - 0.001 = 0.0265-->
+      <material name="blue"/>
+    </visual>
+    <visual name="B2SInf">
+      <geometry>
+        <box size="0.02 0.002 0.035"/>
+      </geometry>
+      <origin rpy="0 0 0 " xyz="0 0.0265 0.0255"/>
+      <!--0.008 para poner eje visual en la superficie de la barra inferior + 0.0175 ques la mitad la la barra = 0.0255-->
+      <!--0.0275 es la mitad de la barra inferior - 0.001 = 0.0265-->
+      <material name="blue"/>
+    </visual>
+  </link>
+
+  <joint name="PITCH" type="revolute"><!--RevSupTORevInf-->
+    <axis xyz="0 -1 0"/>
+    <limit effort="1000.0" lower="0.392699082" upper="2.748893572" velocity="0.001"/>
+    <!--se ajusta el rango de giro para evitar golpear chasis-->
+    <parent link="RevInf"/>
+    <child link="RevSup"/>
+    <origin xyz="0 0 0.033" rpy="0 0.785398163 0"/><!--giro sobre y para poner el servo superior en su posicion 0 grados-->
+    <!--0.006 hasta superficie eje +0.002 hasta superficie barra inf+ 0.025 hasta centro eje sup = 0.033-->
+  </joint>
+
+  <link name="RevSup">
+    <visual name="EjeSSup">
+      <geometry>
+        <cylinder radius="0.01" length="0.051"/>
+      </geometry>
+      <origin rpy="0 1.570796327 1.570796327 " xyz="0 0 0"/><!--giro sobre Y para colocar el cilindro en horinzontal-->
+      <!--giro sobre z para colocar el cilindro correctamente entre barra izq y der-->
+      <material name="blue"/>
+    </visual>
+  </link>
+
+  <joint name="SSupTORevSup" type="fixed">
+    <parent link="RevSup"/>
+    <child link="SSup"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="SSup">
+    <visual name="SSupV">
+      <geometry>
+        <box size="0.046 0.043 0.02"/>
+      </geometry>
+      <origin rpy="0 0 0 " xyz="0.013 -0.001 0"/>
+      <!--0.013= mitad de tamano servo 0.023 - 0.01-->
+      <!--0.001= entre la superficie laterral del servo a la superficie de un de las barras de un lado tiene que haber 0.003 m y en el otro lado 0.005 por lo tanto solo hay que desplazar un milimetro-->
+      <material name="Mblack"/>
+    </visual>
+  </link>
+<!--FIN Definicion cuello-->
+<!--Definicion cabeza-->
+  <joint name="HeadSTOSSup" type="fixed">
+    <parent link="SSup"/>
+    <child link="HeadS"/>
+    <origin xyz="0.036 0 0" rpy="0 0 0"/><!--0.036= tamano de servo en X 0.046 - 0.01-->
+  </joint>
+
+  <link name="HeadS">
+    <visual name="HeadSB">
+      <geometry>
+        <box size="0.006 0.195 0.15"/>
+      </geometry>
+      <origin rpy="0 0 0 " xyz="0.003 0 0.065"/>
+      <material name="P"/>
+    </visual>
+    <visual name="HeadSF">
+      <geometry>
+        <box size="0.003 0.195 0.15"/>
+      </geometry>
+      <origin rpy="0 0 0 " xyz="0.0325 0 0.065"/>
+      <material name="P"/>
+    </visual>
+  </link>
+
+  <joint name="EyesTOHeadS" type="fixed">
+    <parent link="HeadS"/>
+    <child link="Eyes"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="Eyes">
+    <visual name="EyeL">
+      <geometry>
+        <box size="0.015 0.01 0.01"/>
+      </geometry>
+      <origin rpy="0 0 0 " xyz="0.027 0.0695 0.102"/>
+      <!--0.0695= mitad de la plataorma de cristal 0.0975- distancia de borde a mitad de ojo 0.028-->
+      <!--0.102=(mitad de superficie de cristal en eje z 0.075 - distancia de borde superiro cristal hasta mitad del ojo 0.038)+ distancia de eje de coordenadas a eje visual del cristal 0.065-->
+      <material name="MBlack"/>
+    </visual>
+    <visual name="EyeR">
+      <geometry>
+        <box size="0.015 0.01 0.01"/>
+      </geometry>
+      <origin rpy="0 0 0 " xyz="0.027 -0.0695 0.102"/>
+      <material name="MBlack"/>
+    </visual>
+  </link>
+
+  <joint name="cameraTOEyes" type="fixed">
+    <!-- for trasnformate de camera view without modify the visual structure of visbot-->
+    <parent link="Eyes"/>
+    <child link="camera"/>
+    <origin xyz="0 0 0" rpy="1.570796327 3.141592654 1.570796327"/>
+  </joint>
+  
+  <link name="camera">
+    
+  </link>
+
+  <joint name="RaspTOHeadS" type="fixed">
+    <parent link="HeadS"/>
+    <child link="Rasp"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="Rasp">
+    <visual name="RaspL">
+      <geometry>
+        <box size="0.055 0.085 0.01"/>
+      </geometry>
+      <origin rpy="1.570796327 0 1.570796327" xyz="0.015 0.065 0.09"/>
+      <material name="raspT">
+        <texture filename="package://visbot/urdf/texture/texture_6.png"/>
+      </material>
+    </visual>
+    <visual name="RaspR">
+      <geometry>
+        <box size="0.055 0.085 0.01"/>
+      </geometry>
+      <origin rpy="1.570796327 0 1.570796327" xyz="0.015 -0.065 0.09"/>
+      <material name="raspT"/>
+    </visual>
+  </link>
+
+  <joint name="RaspTTTORasp" type="fixed">
+    <parent link="Rasp"/>
+    <child link="RaspTT"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="RaspTT">
+    <visual name="RaspTTLU1">
+      <geometry>
+        <cylinder radius="0.002" length="0.04"/>
+      </geometry>
+      <origin rpy="0 1.570796327 0" xyz="0.017 0.0894 0.13"/>
+      <material name="MBlack"/>
+    </visual>
+    <visual name="RaspTTLU2">
+      <geometry>
+        <cylinder radius="0.002" length="0.04"/>
+      </geometry>
+      <origin rpy="0 1.570796327 0" xyz="0.017 0.0405 0.13"/>
+      <material name="MBlack"/>
+    </visual>
+    <visual name="RaspTTLD1">
+      <geometry>
+        <cylinder radius="0.002" length="0.04"/>
+      </geometry>
+      <origin rpy="0 1.570796327 0" xyz="0.017 0.0895 0.071"/>
+      <material name="MBlack"/>
+    </visual>
+    <visual name="RaspTTLD2">
+      <geometry>
+        <cylinder radius="0.002" length="0.04"/>
+      </geometry>
+      <origin rpy="0 1.570796327 0" xyz="0.017 0.0407 0.0707"/>
+      <material name="MBlack"/>
+    </visual>
+
+    <visual name="RaspTTRU1">
+      <geometry>
+        <cylinder radius="0.002" length="0.04"/>
+      </geometry>
+      <origin rpy="0 1.570796327 0" xyz="0.017 -0.0894 0.13"/>
+      <material name="MBlack"/>
+    </visual>
+    <visual name="RaspTTRU2">
+      <geometry>
+        <cylinder radius="0.002" length="0.04"/>
+      </geometry>
+      <origin rpy="0 1.570796327 0" xyz="0.017 -0.0405 0.13"/>
+      <material name="MBlack"/>
+    </visual>
+    <visual name="RaspTTRD1">
+      <geometry>
+        <cylinder radius="0.002" length="0.04"/>
+      </geometry>
+      <origin rpy="0 1.570796327 0" xyz="0.017 -0.0895 0.071"/>
+      <material name="MBlack"/>
+    </visual>
+    <visual name="RaspTTRD2">
+      <geometry>
+        <cylinder radius="0.002" length="0.04"/>
+      </geometry>
+      <origin rpy="0 1.570796327 0" xyz="0.017 -0.0407 0.0707"/>
+      <material name="MBlack"/>
+    </visual>
+    
+  </link>
+
+  <joint name="RaspBackTORasp" type="fixed">
+    <parent link="Rasp"/>
+    <child link="RaspBack"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="RaspBack">
+    <visual name="RaspLB">
+      <geometry>
+        <box size="0.055 0.085 0.001"/>
+      </geometry>
+      <origin rpy="1.570796327 0 1.570796327" xyz="0.01 0.065 0.09"/>
+      <material name="raspTB">
+        <texture filename="package://visbot/urdf/texture/texture_7.png"/>
+      </material>
+    </visual>
+    <visual name="RaspRB">
+      <geometry>
+        <box size="0.055 0.085 0.001"/>
+      </geometry>
+      <origin rpy="1.570796327 0 1.570796327" xyz="0.01 -0.065 0.09"/>
+      <material name="raspTB"/>
+    </visual>
+    
+  </link>
+
+</robot>
